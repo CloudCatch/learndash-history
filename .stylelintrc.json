@@ -1,0 +1,19 @@
+{
+    "extends": [
+        "stylelint-config-wordpress/scss",
+        "stylelint-config-recommended"
+    ],
+    "ignoreFiles": [
+        "sass/_normalize.scss",
+        "**/*/js"
+    ],
+    "rules": {
+        "font-family-no-missing-generic-family-keyword": null,
+        "no-descending-specificity": null,
+        "block-no-empty": null,
+        "no-duplicate-selectors": null,
+        "font-family-no-duplicate-names": null,
+        "selector-class-pattern": null,
+        "selector-pseudo-element-colon-notation": "single"
+    }
+}

@@ -1,0 +1,9 @@
+# Ignore vendor directories.
+node_modules/*
+vendor/*
+
+# Ignore minified styles.
+*.min.css
+*.js
+*.json
+*.xml

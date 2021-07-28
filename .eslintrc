@@ -1,0 +1,23 @@
+{
+    "parser": "babel-eslint",
+    "env": {
+      "browser": true,
+      "es6": true,
+		  "node": true,
+		  "mocha": true
+    },
+    "globals": {
+      "wp": true,
+      "wpApiSettings": true,
+      "window": true,
+      "document": true
+	  },
+    "rules": {
+      "object-curly-spacing": 1,
+      "array-bracket-spacing": 1,
+      "space-in-parens": ["error", "always"],
+      "key-spacing": ["error", { "align": "colon" }],
+      "indent": ["error", "tab"],
+      "no-multi-spaces": ["error", { "exceptions": { "VariableDeclarator": true } }]
+    }
+}
