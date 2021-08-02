@@ -1,0 +1,11 @@
+# [1.2.0](https://github.com/seattlewebco/learndash-history/compare/1.1.2...1.2.0) (2021-08-02)
+
+
+### Bug Fixes
+
+* update dependencies ([fc46044](https://github.com/seattlewebco/learndash-history/commit/fc46044ba9b2571dc34b014d873dd49bcc44b59b))
+
+
+### Features
+
+* record topic and lesson completions ([6baf3a6](https://github.com/seattlewebco/learndash-history/commit/6baf3a66a80d48d491907a2502291e37d31215d8))
