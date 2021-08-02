@@ -43,15 +43,3 @@ jobs:
       #     SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
       #     SLUG: learndash-history
       #     VERSION: ${{ steps.semantic.outputs.release-version }}
-      - name: Package
-        run: |
-          npm run package
-
-      - name: Upload release asset
-        if: |
-          steps.semantic.outputs.new-release-published == 'true'
-        uses: softprops/action-gh-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          files: build/learndash-history.zip

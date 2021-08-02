@@ -72,6 +72,10 @@
 		<exclude name="Generic.Commenting.DocComment.NonParamGroup" />
 	</rule>
 
+	<rule ref="Generic.Files.LineEndings">
+		<exclude name="Generic.Files.LineEndings.InvalidEOLChar"/>
+	</rule>
+
 	<rule ref="PEAR.Functions.FunctionCallSignature.EmptyLine">
 		<exclude-pattern>tests/e2e-tests/</exclude-pattern>
 	</rule>
