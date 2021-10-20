@@ -87,6 +87,7 @@ class ActivityHistory extends \WP_List_Table {
                 JOIN   `{$wpdb->posts}` post
                     ON `history`.post_id = `post`.ID
 			{$where}
+			ORDER BY `history`.id DESC
             LIMIT {$offset}, {$per_page}
         ",
 			ARRAY_A
