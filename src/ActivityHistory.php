@@ -80,7 +80,7 @@ class ActivityHistory extends \WP_List_Table {
 			"
             SELECT SQL_CALC_FOUND_ROWS `history`.*, `user`.*, `course`.post_title course_title, `post`.post_title post_title
             FROM   `{$wpdb->prefix}learndash_history` history
-                JOIN `{$wpdb->users}` user
+                LEFT JOIN `{$wpdb->users}` user
                     ON `history`.user_id = `user`.ID
                 JOIN   `{$wpdb->posts}` course
                     ON `history`.course_id = `course`.ID
