@@ -63,7 +63,7 @@ function course_completed( $course_data ) {
 		'activity_type'       => 'course',
 		'activity_status'     => 1,
 		'activity_started'    => \ld_course_access_from( $course_data['course']->ID, $course_data['user']->ID ),
-		'activity_completed'  => $course_data['course_completed'],
+		'activity_completed'  => $course_data['course_completed'] ?? null,
 	);
 
 	record( $data );
