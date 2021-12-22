@@ -10,15 +10,17 @@ namespace SeattleWebCo\LearnDashHistory\Functions;
 function certificate_link( $history ) {
 	$certificate_link = '';
 
-	switch ( $history['activity_type'] ) {
-		case 'course':
-			$certificate_link = learndash_get_course_certificate_link( $history['course_id'], $history['user_id'] );
-			break;
+	if ( isset( $history['activity_type'] ) ) {
+		switch ( $history['activity_type'] ) {
+			case 'course':
+				$certificate_link = learndash_get_course_certificate_link( $history['course_id'], $history['user_id'] );
+				break;
 
-		case 'quiz':
-			$certificate_details = $history['pass'] ? learndash_certificate_details( $history['post_id'], $history['user_id'] ) : '';
-			$certificate_link    = $certificate_details['certificateLink'] ?? '';
-			break;
+			case 'quiz':
+				$certificate_details = $history['pass'] ? learndash_certificate_details( $history['post_id'], $history['user_id'] ) : '';
+				$certificate_link    = $certificate_details['certificateLink'] ?? '';
+				break;
+		}
 	}
 
 		$certificate_link = $certificate_link ? add_query_arg( array( 'hid' => $history['id'] ), $certificate_link ) : '';
@@ -36,10 +38,10 @@ function courseinfo( $value, $shortcode_atts ) {
 				"
 			SELECT *
 			FROM   {$wpdb->prefix}learndash_history
-			WHERE  id = %d
+			WHERE  id = %s
 			LIMIT  1
 		",
-				absint( $_REQUEST['hid'] )
+				preg_replace( '/[^a-z\d\-\_]+/i', '', $_REQUEST['hid'] )
 			),
 			ARRAY_A
 		);

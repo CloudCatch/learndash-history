@@ -20,7 +20,8 @@ class ActivityHistory extends \WP_List_Table {
 	 * @return string
 	 */
 	public function prepare_search() {
-		$query = trim( esc_sql( sanitize_key( $_GET['s'] ?? '' ) ) );
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput
+		$query = isset( $_REQUEST['s'] ) ? wp_unslash( trim( $_REQUEST['s'] ) ) : '';
 		$where = 'WHERE 1 = 1 ';
 
 		$search_fields = apply_filters(

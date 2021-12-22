@@ -15,6 +15,10 @@
 
 namespace SeattleWebCo\LearnDashHistory;
 
+define( 'LEARNDASH_HISTORY_PATH', \plugin_dir_path( __FILE__ ) );
+define( 'LEARNDASH_HISTORY_URL', \plugin_dir_url( __FILE__ ) );
+define( 'LEARNDASH_HISTORY_VER', function_exists( '\get_plugin_data' ) ? \get_plugin_data( __FILE__ )['Version'] : '1.0.0' );
+
 /**
  * Setup plugin
  *
@@ -29,11 +33,23 @@ function initialize() {
 		require_once plugin_dir_path( __FILE__ ) . '/lib/functions/triggers.php';
 		require_once plugin_dir_path( __FILE__ ) . '/lib/functions/views.php';
 		require_once plugin_dir_path( __FILE__ ) . '/lib/functions/certificates.php';
+		require_once plugin_dir_path( __FILE__ ) . '/lib/functions/rest-api.php';
+		require_once plugin_dir_path( __FILE__ ) . '/lib/functions/history.php';
+
+		/**
+		 * Load integrations
+		 */
+		require_once plugin_dir_path( __FILE__ ) . '/lib/integrations/jwt-auth.php';
+
+		/**
+		 * Load shortcodes
+		 */
+		require_once plugin_dir_path( __FILE__ ) . '/lib/shortcodes/course-history.php';
 
 		/**
 		 * Init localization files
 		 */
-		load_plugin_textdomain( 'learndash-history', false, plugin_dir_path( __FILE__ ) . '/languages' );
+		load_plugin_textdomain( 'learndash-history', false, LEARNDASH_HISTORY_PATH . 'languages' );
 	}
 }
 add_action( 'plugins_loaded', __NAMESPACE__ . '\initialize' );
@@ -51,6 +67,7 @@ function install() {
 	$table = "CREATE TABLE `{$wpdb->prefix}learndash_history`
     (
         `id`                 BIGINT(20) UNSIGNED NOT NULL auto_increment,
+        `uid`                VARCHAR(11) NULL DEFAULT NULL,
         `user_id`            BIGINT(20) UNSIGNED NOT NULL DEFAULT 0,
         `post_id`            BIGINT(20) UNSIGNED NOT NULL DEFAULT 0,
         `course_id`          BIGINT(20) UNSIGNED NOT NULL DEFAULT 0,
@@ -63,7 +80,12 @@ function install() {
         `pass`               INT(11) UNSIGNED NULL DEFAULT NULL,
         `points`             INT(11) UNSIGNED NULL DEFAULT NULL,
         `percentage`         INT(11) UNSIGNED NULL DEFAULT NULL,
-        PRIMARY KEY (`id`),
+        `statistic_ref_id`   INT(11) UNSIGNED NULL DEFAULT NULL,
+        `rel`                BIGINT(20) UNSIGNED NULL DEFAULT NULL,
+        `state`              TINYINT(1) UNSIGNED NULL DEFAULT 1,
+        `migrated`           TINYINT(1) UNSIGNED NULL DEFAULT NULL,
+        PRIMARY KEY  (`id`),
+        UNIQUE INDEX `uid` (`uid`),
         INDEX `user_id` (`user_id`),
         INDEX `post_id` (`post_id`),
         INDEX `course_id` (`course_id`),
@@ -75,7 +97,11 @@ function install() {
         INDEX `count` (`count`),
         INDEX `pass` (`pass`),
         INDEX `points` (`points`),
-        INDEX `percentage` (`percentage`)
+        INDEX `percentage` (`percentage`),
+        INDEX `statistic_ref_id` (`statistic_ref_id`),
+        INDEX `rel` (`rel`),
+        INDEX `state` (`state`),
+        INDEX `migrated` (`migrated`)
     ) {$charset_collate}";
 
 	require_once ABSPATH . 'wp-admin/includes/upgrade.php';

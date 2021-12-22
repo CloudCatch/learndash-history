@@ -11,6 +11,7 @@
 // Import required packages.
 const mix = require("laravel-mix");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
+const ImageminPlugin = require('imagemin-webpack-plugin').default;
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const path = require('path');
 
@@ -71,9 +72,7 @@ mix.version();
  *
  * @link https://laravel.com/docs/5.6/mix#working-with-scripts
  */
-mix
-  .js(`${devPath}/js/admin.js`, `${distPath}/js`)
-  .js(`${devPath}/js/frontend.js`, `${distPath}/js`);
+mix.js(`${devPath}/js/admin.js`, `${distPath}/js`).react();
 
 /*
  * Compile CSS. Mix supports Sass, Less, Stylus, and plain CSS, and has functions
@@ -150,10 +149,32 @@ mix.webpackConfig({
 			{
 				from            : `${devPath}/fonts`,
 				to              : `${distPath}/fonts`, 
+				noErrorOnMissing: true,
+				globOptions: {
+					ignore: [
+						'**/selection.json'
+					]
+				}
+			},
+			{
+				from: `${devPath}/svg`, 
+				to: `${distPath}/svg`,
 				noErrorOnMissing: true
-			} 
+			},
 		]
-	} )
+	} ),
+	// @link https://github.com/Klathmon/imagemin-webpack-plugin
+	new ImageminPlugin({
+		test: /\.(jpe?g|png|gif|svg)$/i,
+		disable: process.env.NODE_ENV !== 'production',
+		svgo: {
+			plugins: [
+				{cleanupIDs: false},
+				{removeViewBox: false},
+				{removeUnknownsAndDefaults: false}
+			]
+		}
+	})
   ]
 });
 

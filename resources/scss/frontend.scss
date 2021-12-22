@@ -1,4 +1,79 @@
+@import "icons";
+
 .learndash-history {
+
+	&-course {
+		margin: 0 0 2em;
+
+		&-title {
+			border-bottom: 2px solid;
+			padding-bottom: 0.25em;
+			margin-bottom: 0.5em;
+
+			a {
+				text-decoration: none;
+			}
+		}
+
+		&-info {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			column-gap: 1em;
+
+			&-title {
+				flex-grow: 1;
+				flex-basis: auto;
+			}
+
+			&-status {
+				flex-basis: 25%;
+				text-align: center;
+			}
+
+			&-certificate {
+				font-size: 150%;
+				line-height: 1;
+				flex-basis: 80px;
+				text-align: center;
+			}
+		}
+
+		&-quizzes {
+
+		}
+
+		&-quiz {
+			display: flex;
+			flex-wrap: wrap;
+			align-items: center;
+			justify-content: flex-end;
+			column-gap: 1em;
+			margin-left: 1em;
+			padding-left: 1em;
+			border-left: 2px solid;
+
+			&-title {
+				flex: 1 0 100%;
+			}
+
+			&-score {
+				margin-right: auto;
+			}
+
+			&-statistics {
+				flex-basis: 25%;
+				text-align: center;
+			}
+
+			&-certificate {
+				font-size: 150%;
+				line-height: 1;
+				flex-basis: 80px;
+				text-align: center;
+			}
+		}
+	}
 
 	&-list-item {
 		display: flex;
@@ -123,4 +198,55 @@
 	.learndash-history-webinar-field-date {
 		max-width: 100%;
 	}
+}
+
+.ld-history-row {
+
+	&-course {
+		display: flex;
+		justify-content: space-between;
+		padding: 1rem 0;
+
+		span,
+		a {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+
+			span,
+			a {
+				flex-direction: row;
+			}
+		}
+
+		&--certificate {
+			padding: 0 1rem;
+		}
+	}
+
+	&-quizzes {
+		background: rgba(0, 0, 0, 0.05);
+		padding: 1rem;
+		border: 0;
+
+		th,
+		td {
+			border: 0;
+			background: none;
+			padding: 0 1rem;
+			text-align: left;
+		}
+	}
+}
+
+.ld-history-icon {
+
+	&-certificate {
+		width: 1.25em;
+	}
+}
+
+.ld-expired {
+	font-size: small;
+	opacity: 0.8;
 }

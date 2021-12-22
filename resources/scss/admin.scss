@@ -1,0 +1,40 @@
+.learndash-history {
+
+	&-migrate-form {
+		display: flex;
+		flex-wrap: wrap;
+		margin: 2em 0;
+
+		p,
+		label {
+			flex: 1 0 100%;
+			margin: 0 0 0.5em;
+		}
+	}
+
+	&-migrate-progress-bar {
+		width: 100%;
+		display: flex;
+		justify-content: flex-start;
+		border-radius: 3px;
+		overflow: hidden;
+		margin: 1em 0 0;
+		background: rgba(0, 0, 0, 0.05);
+
+		span {
+			display: block;
+			flex: 1 0 100%;
+			background: rgb(51, 135, 203);
+			background: linear-gradient(180deg, rgba(51, 135, 203, 1) 0%, rgba(35, 127, 195, 1) 100%);
+			height: 32px;
+			transition: all linear 0.5s;
+			border-radius: 2px;
+			overflow: hidden;
+		}
+	}
+
+	&-error {
+		flex: 1 0 100%;
+    	color: #d63638;
+	}
+}

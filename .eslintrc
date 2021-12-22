@@ -10,7 +10,8 @@
       "wp": true,
       "wpApiSettings": true,
       "window": true,
-      "document": true
+      "document": true,
+      "learndashhistory": true
 	  },
     "rules": {
       "object-curly-spacing": 1,

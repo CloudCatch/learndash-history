@@ -27,7 +27,7 @@ function record( $data ) {
 				'post_id'            => 0,
 				'course_id'          => 0,
 				'activity_type'      => null,
-				'activity_status'    => null,
+				'activity_status'    => 0,
 				'activity_started'   => null,
 				'activity_completed' => null,
 				'score'              => null,
@@ -35,11 +35,12 @@ function record( $data ) {
 				'pass'               => null,
 				'points'             => null,
 				'percentage'         => null,
+				'statistic_ref_id'   => null,
 			)
 		)
 	);
 
-    // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
 	$record = $wpdb->insert( $wpdb->prefix . 'learndash_history', $data );
 
 	if ( false === $record ) {
@@ -48,6 +49,89 @@ function record( $data ) {
 
 	return $record;
 }
+
+/**
+ * Record resource access
+ *
+ * @param array $args User activity arguments.
+ * @return void
+ */
+function update_activity( $args ) {
+	if ( 'access' === $args['activity_type'] ) {
+		return;
+	}
+
+	$data = array(
+		'user_id'             => $args['user_id'],
+		'post_id'             => $args['post_id'],
+		'course_id'           => $args['course_id'],
+		'activity_type'       => $args['activity_type'],
+		'activity_status'     => 0,
+		'activity_started'    => time(),
+	);
+
+	record( $data );
+}
+// \add_action( 'learndash_update_user_activity', __NAMESPACE__ . '\update_activity' );
+
+/**
+ * Expire recorded course history
+ *
+ * @param int $user_id User ID.
+ * @param int $course_id Course ID.
+ * @return void
+ */
+function course_access_expired( $user_id, $course_id ) {
+	$data = array(
+		'user_id'             => $user_id,
+		'post_id'             => $course_id,
+		'course_id'           => $course_id,
+		'activity_type'       => 'expire',
+		'activity_status'     => 0,
+		'activity_started'    => time(),
+	);
+
+	record( $data );
+}
+\add_action( 'learndash_user_course_access_expired', __NAMESPACE__ . '\course_access_expired', 10, 2 );
+
+/**
+ * Record course access
+ *
+ * @param int     $user_id User ID.
+ * @param int     $course_id Course ID.
+ * @param string  $course_access_list A comma-separated list of user IDs used for the course_access_list field.
+ * @param boolean $remove Whether to remove course access from the user.
+ * @return void
+ */
+function course_access( $user_id, $course_id, $course_access_list, $remove ) {
+	global $wpdb;
+
+	if ( $remove ) {
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+		$wpdb->update(
+			$wpdb->prefix . 'learndash_history',
+			array( 'state' => 2 ),
+			array(
+				'user_id'   => $user_id,
+				'course_id' => $course_id,
+			)
+		);
+
+		return;
+	}
+
+	$data = array(
+		'user_id'             => $user_id,
+		'post_id'             => $course_id,
+		'course_id'           => $course_id,
+		'activity_type'       => 'access',
+		'activity_started'    => time(),
+	);
+
+	record( $data );
+}
+\add_action( 'learndash_update_course_access', __NAMESPACE__ . '\course_access', 10, 4 );
 
 /**
  * Record course completed
@@ -62,8 +146,7 @@ function course_completed( $course_data ) {
 		'course_id'           => $course_data['course']->ID,
 		'activity_type'       => 'course',
 		'activity_status'     => 1,
-		'activity_started'    => \ld_course_access_from( $course_data['course']->ID, $course_data['user']->ID ),
-		'activity_completed'  => $course_data['course_completed'] ?? null,
+		'activity_completed'  => $course_data['course_completed'] ?? time(),
 	);
 
 	record( $data );
@@ -79,8 +162,6 @@ function course_completed( $course_data ) {
  * @return void
  */
 function quiz_completed( $quiz_data, $user ) {
-	Log::write( \esc_html__( 'quiz data', 'learndash-history' ), 'error', $quiz_data );
-
 	$data = array(
 		'user_id'             => $user->ID,
 		'post_id'             => is_object( $quiz_data['quiz'] ) ? $quiz_data['quiz']->ID : $quiz_data['quiz'],
@@ -94,6 +175,7 @@ function quiz_completed( $quiz_data, $user ) {
 		'pass'                => $quiz_data['pass'],
 		'points'              => $quiz_data['points'],
 		'percentage'          => $quiz_data['percentage'],
+		'statistic_ref_id'    => $quiz_data['statistic_ref_id'],
 	);
 
 	record( $data );
