@@ -63,6 +63,7 @@ function get_user_history( $user_id = null, $args = array() ) {
 		array(
 			'status'                   => null,
 			'include_enrolled_courses' => 1,
+			'types'					   => array( 'course', 'quiz', 'access' )
 		)
 	);
 
@@ -79,6 +80,12 @@ function get_user_history( $user_id = null, $args = array() ) {
 		$where .= sprintf( ' AND `history`.activity_status = %d ', \absint( $args['status'] ) );
 	}
 
+	if ( $args['types'] ) {
+		$where .= "AND `history`.activity_type IN ('" . implode( "', '", $args['types'] ) . "')";
+	} else {
+		$where .= "AND `history`.activity_type IN ('course', 'quiz')";
+	}
+
     // phpcs:ignore
     $history = $wpdb->get_results( 
 		"
@@ -91,9 +98,7 @@ function get_user_history( $user_id = null, $args = array() ) {
 				JOIN   `{$wpdb->posts}` post
 					ON `history`.post_id = `post`.ID
 			{$where}
-			AND `history`.activity_type IN ('course', 'quiz')
-			ORDER BY `history`.activity_started DESC
-		",
+			ORDER BY `history`.id DESC",
 		ARRAY_A
 	);
 
