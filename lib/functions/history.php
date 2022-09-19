@@ -92,6 +92,7 @@ function get_user_history( $user_id = null, $args = array() ) {
 					ON `history`.post_id = `post`.ID
 			{$where}
 			AND `history`.activity_type IN ('course', 'quiz')
+			ORDER BY `history`.activity_started DESC
 		",
 		ARRAY_A
 	);

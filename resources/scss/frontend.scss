@@ -3,7 +3,6 @@
 .learndash-history {
 
 	&-course {
-		margin: 0 0 2em;
 
 		&-title {
 			border-bottom: 2px solid;
@@ -15,11 +14,25 @@
 			}
 		}
 
+		&-history {
+			display: table;
+			width: 100%;
+		}
+
 		&-info {
-			display: flex;
+			display: table-row;
 			justify-content: space-between;
 			align-items: center;
 			column-gap: 1em;
+
+			&:nth-child(odd) {
+				background: rgba(0,0,0,.025);
+			}
+
+			> * {
+				display: table-cell;
+				padding: .5em;
+			}
 
 			&-title {
 				flex-grow: 1;
@@ -27,14 +40,14 @@
 			}
 
 			&-status {
-				flex-basis: 25%;
+				width: 120px;
 				text-align: center;
 			}
 
 			&-certificate {
 				font-size: 150%;
 				line-height: 1;
-				flex-basis: 80px;
+				width: 80px;
 				text-align: center;
 			}
 		}

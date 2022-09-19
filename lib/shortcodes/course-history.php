@@ -40,91 +40,76 @@ function course_history_shortcode( $atts ) {
 	?>
 
 	<div class="learndash-wrapper">
-
-		<?php
-		foreach ( $history as $course_id => $items ) {
-			?>
-
-			<h3 class="learndash-history-course-title"><a href="<?php echo \esc_url( \get_permalink( $course_id ) ); ?>"><?php echo \esc_html( \get_the_title( $course_id ) ); ?></a></h3>
-
+		<div class="learndash-history-course-history">
 			<?php
-			if ( $items ) {
-				foreach ( $items as $item ) {
-					$certificate_link = certificate_link( $item );
-					?>
-
-					<div class="learndash-history-course">
-						<div class="learndash-history-course-info">
-							<span class="learndash-history-course-info-title"><?php echo esc_html( gmdate( get_option( 'date_format' ), $item['activity_completed'] ?: $item['activity_started'] ) ); ?></span>
-							<span class="learndash-history-course-info-status">
-								<?php
-									echo $item['activity_status'] && $item['activity_completed'] ? esc_html__( 'Completed', 'learndash-history' ) : esc_html__( 'In Progress', 'learndash-history' );
-								?>
-							</span>
-							<span class="learndash-history-course-info-certificate">
-								<?php
-								if ( $certificate_link ) {
-									?>
-
-									<span>
-										<a href="<?php echo esc_url( $certificate_link ); ?>" target="_blank" title="<?php esc_attr_e( 'View Certificate', 'learndash-history' ); ?>">
-											<span class="ldh-icon-award"></span>
-										</a>
-									</span>
-
-									<?php
-								}
-								?>
-							</span>
-						</div>
-
-						<?php if ( ! empty( $item['quizzes'] ) ) { ?>
-
-							<div class="learndash-history-course-quizzes">
-								<?php foreach ( $item['quizzes'] as $quiz ) { ?>
-
-									<div class="learndash-history-course-quiz">
-										<span class="learndash-history-course-quiz-title">
-											<a href="<?php echo get_permalink( $quiz['post_id'] ); ?>"><?php echo esc_html( $quiz['post_title'] ); ?></a>
-										</span>
-										<span class="learndash-history-course-quiz-score">
-											<?php echo sprintf( '%s: %s', esc_html__( 'Score', 'learndash-history' ), esc_html( round( $quiz['percentage'], 2 ) . '%' ) ); ?>
-										</span>
-										<span class="learndash-history-course-quiz-certificate">
-											<?php
-											$certificate_link = certificate_link( $quiz );
-
-											if ( $certificate_link ) {
-												?>
-
-														<a href="<?php echo esc_url( $certificate_link ); ?>" target="_blank" title="<?php esc_attr_e( 'View Certificate', 'learndash-history' ); ?>">
-															<span class="ldh-icon-award"></span>
-														</a>
-
-													<?php
-											}
-											?>
-										</span>
-									</div>
-
-								<?php } ?>
-							</div>
-
-						<?php } ?>
-					</div>
-
-					<?php
-				}
-			} else {
+			foreach ( $history as $item ) {
+				$certificate_link = certificate_link( $item );
 				?>
 
-				<p><?php esc_html_e( 'No activity to display', 'learndash-history' ); ?></p>
+					<div class="learndash-history-course-info">
+						<span class="learndash-history-course-info-title"><?php echo get_the_title( $item['post_id'] ); ?></span>
+						<span class="learndash-history-course-info-date"><?php echo esc_html( gmdate( get_option( 'date_format' ), $item['activity_completed'] ?: $item['activity_started'] ) ); ?></span>
+						<span class="learndash-history-course-info-type"><?php echo esc_html( \LearnDash_Custom_Label::get_label( $item['activity_type'] ) ); ?></span>
+						<span class="learndash-history-course-info-status">
+							<?php
+								echo $item['activity_status'] && $item['activity_completed'] ? esc_html__( 'Completed', 'learndash-history' ) : esc_html__( 'In Progress', 'learndash-history' );
+							?>
+						</span>
+						<span class="learndash-history-course-info-certificate">
+							<?php
+							if ( $certificate_link ) {
+								?>
+
+								<span>
+									<a href="<?php echo esc_url( $certificate_link ); ?>" target="_blank" title="<?php esc_attr_e( 'View Certificate', 'learndash-history' ); ?>">
+										<span class="ldh-icon-award"></span>
+									</a>
+								</span>
+
+								<?php
+							}
+							?>
+						</span>
+					</div>
+
+					<?php if ( ! empty( $item['quizzes'] ) ) { ?>
+
+						<div class="learndash-history-course-quizzes">
+							<?php foreach ( $item['quizzes'] as $quiz ) { ?>
+
+								<div class="learndash-history-course-quiz">
+									<span class="learndash-history-course-quiz-title">
+										<a href="<?php echo get_permalink( $quiz['post_id'] ); ?>"><?php echo esc_html( $quiz['post_title'] ); ?></a>
+									</span>
+									<span class="learndash-history-course-quiz-score">
+										<?php echo sprintf( '%s: %s', esc_html__( 'Score', 'learndash-history' ), esc_html( round( $quiz['percentage'], 2 ) . '%' ) ); ?>
+									</span>
+									<span class="learndash-history-course-quiz-certificate">
+										<?php
+										$certificate_link = certificate_link( $quiz );
+
+										if ( $certificate_link ) {
+											?>
+
+													<a href="<?php echo esc_url( $certificate_link ); ?>" target="_blank" title="<?php esc_attr_e( 'View Certificate', 'learndash-history' ); ?>">
+														<span class="ldh-icon-award"></span>
+													</a>
+
+												<?php
+										}
+										?>
+									</span>
+								</div>
+
+							<?php } ?>
+						</div>
+
+					<?php } ?>
 
 				<?php
 			}
-		}
-		?>
-
+			?>
+			</div>
 		</div>
 
 		<?php
