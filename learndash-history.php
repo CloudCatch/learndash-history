@@ -64,18 +64,8 @@ function install() {
         `points`             INT(11) UNSIGNED NULL DEFAULT NULL,
         `percentage`         INT(11) UNSIGNED NULL DEFAULT NULL,
         PRIMARY KEY (`id`),
-        INDEX `user_id` (`user_id`),
-        INDEX `post_id` (`post_id`),
-        INDEX `course_id` (`course_id`),
-        INDEX `activity_status` (`activity_status`),
-        INDEX `activity_type` (`activity_type`),
-        INDEX `activity_started` (`activity_started`),
-        INDEX `activity_completed` (`activity_completed`),
-        INDEX `score` (`score`),
-        INDEX `count` (`count`),
-        INDEX `pass` (`pass`),
-        INDEX `points` (`points`),
-        INDEX `percentage` (`percentage`)
+        INDEX `idx` (`user_id`,`post_id`,`course_id`,`activity_type`,`pass`,`percentage`,`activity_completed`),
+        INDEX `user_id` (`user_id`)
     ) {$charset_collate}";
 
 	require_once ABSPATH . 'wp-admin/includes/upgrade.php';

@@ -63,7 +63,7 @@ function course_completed( $course_data ) {
 		'activity_type'       => 'course',
 		'activity_status'     => 1,
 		'activity_started'    => \ld_course_access_from( $course_data['course']->ID, $course_data['user']->ID ),
-		'activity_completed'  => $course_data['course_completed'] ?? null,
+		'activity_completed'  => $course_data['course_completed'],
 	);
 
 	record( $data );
@@ -81,14 +81,29 @@ function course_completed( $course_data ) {
 function quiz_completed( $quiz_data, $user ) {
 	Log::write( \esc_html__( 'quiz data', 'learndash-history' ), 'error', $quiz_data );
 
+	$started = 0;
+	$completed = 0;
+
+	if ( isset( $quiz_data['started'] ) ) {
+		$started = $quiz_data['started'];
+	} else if ( isset( $quiz_data['activity_started'] ) ) {
+		$started = $quiz_data['activity_started'];
+	}
+
+	if ( isset( $quiz_data['completed'] ) ) {
+		$completed = $quiz_data['completed'];
+	} else if ( isset( $quiz_data['activity_completed'] ) ) {
+		$completed = $quiz_data['activity_completed'];
+	}
+
 	$data = array(
 		'user_id'             => $user->ID,
 		'post_id'             => is_object( $quiz_data['quiz'] ) ? $quiz_data['quiz']->ID : $quiz_data['quiz'],
 		'course_id'           => is_object( $quiz_data['course'] ) ? $quiz_data['course']->ID : $quiz_data['course'],
 		'activity_type'       => 'quiz',
 		'activity_status'     => \absint( $quiz_data['pass'] ),
-		'activity_started'    => $quiz_data['started'],
-		'activity_completed'  => $quiz_data['completed'],
+		'activity_started'    => $started,
+		'activity_completed'  => $completed,
 		'score'               => $quiz_data['score'],
 		'count'               => $quiz_data['count'],
 		'pass'                => $quiz_data['pass'],
@@ -99,43 +114,3 @@ function quiz_completed( $quiz_data, $user ) {
 	record( $data );
 }
 \add_action( 'learndash_quiz_completed', __NAMESPACE__ . '\quiz_completed', 10, 2 );
-
-/**
- * Record lesson completed
- *
- * @param array $lesson_data Lesson data to record.
- * @return void
- */
-function lesson_completed( $lesson_data ) {
-	$data = array(
-		'user_id'             => is_object( $lesson_data['user'] ) ? $lesson_data['user']->ID : $lesson_data['user'],
-		'post_id'             => is_object( $lesson_data['lesson'] ) ? $lesson_data['lesson']->ID : $lesson_data['lesson'],
-		'course_id'           => is_object( $lesson_data['course'] ) ? $lesson_data['course']->ID : $lesson_data['course'],
-		'activity_type'       => 'lesson',
-		'activity_status'     => 1,
-		'activity_completed'  => time(),
-	);
-
-	record( $data );
-}
-\add_action( 'learndash_lesson_completed', __NAMESPACE__ . '\lesson_completed' );
-
-/**
- * Record topic completed
- *
- * @param array $topic_data Topic data to record.
- * @return void
- */
-function topic_completed( $topic_data ) {
-	$data = array(
-		'user_id'             => is_object( $topic_data['user'] ) ? $topic_data['user']->ID : $topic_data['user'],
-		'post_id'             => is_object( $topic_data['topic'] ) ? $topic_data['topic']->ID : $topic_data['topic'],
-		'course_id'           => is_object( $topic_data['course'] ) ? $topic_data['course']->ID : $topic_data['course'],
-		'activity_type'       => 'topic',
-		'activity_status'     => 1,
-		'activity_completed'  => time(),
-	);
-
-	record( $data );
-}
-\add_action( 'learndash_topic_completed', __NAMESPACE__ . '\topic_completed' );
