@@ -36,11 +36,15 @@ class ActivityHistory extends \WP_List_Table {
 		if ( ! empty( $query ) && ! empty( $search_fields ) ) {
 			$where .= 'AND (';
 
-			$i = 0;
-			foreach ( $search_fields as $field ) {
-				$where .= $i ? " OR {$field} LIKE '%{$query}%' " : " {$field} LIKE '%{$query}%' ";
+			if ( is_email( $query ) ) {
+				$where .= " user_email = '{$query}' ";
+			} else {
+				$i = 0;
+				foreach ( $search_fields as $field ) {
+					$where .= $i ? " OR {$field} LIKE '%{$query}%' " : " {$field} LIKE '%{$query}%' ";
 
-				$i++;
+					++$i;
+				}
 			}
 
 			$where .= ')';
@@ -168,7 +172,6 @@ class ActivityHistory extends \WP_List_Table {
 				} elseif ( $userdata->last_name ) {
 					$name = $userdata->last_name;
 				}
-				
 
 				$value = sprintf( '<a href="%s" target="_blank">%s</a>', get_edit_user_link( $item['user_id'] ), esc_html( trim( $name ) ) );
 				break;

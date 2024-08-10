@@ -47,12 +47,6 @@
 		<exclude-pattern>src/</exclude-pattern>
 	</rule>
 
-	<rule ref="WordPress.NamingConventions.ValidVariableName">
-		<properties>
-			<property name="customPropertiesWhitelist" type="array" value="clientId,clientSecret,redirectUri"/>
-		</properties>
-	</rule>
-
 	<rule ref="WordPress.Arrays.MultipleStatementAlignment">
 		<properties>
 			<!-- No need to adjust alignment of large arrays when the item with the largest key is removed. -->
