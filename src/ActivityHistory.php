@@ -74,7 +74,7 @@ class ActivityHistory extends \WP_List_Table {
 
 		$data = $wpdb->get_results(
 			"
-            SELECT `history`.user_id, `history`.post_id, `history`.course_id, `history`.activity_type, `history`.pass, `history`.percentage, `history`.activity_completed
+            SELECT `history`.id, `history`.user_id, `history`.post_id, `history`.course_id, `history`.activity_type, `history`.pass, `history`.percentage, `history`.activity_completed
             FROM   `{$wpdb->prefix}learndash_history` history
 			JOIN  `{$wpdb->users}` users ON `history`.user_id = `users`.ID
 			{$where}
