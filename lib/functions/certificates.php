@@ -64,10 +64,6 @@ function certificate_display() {
 		return;
 	}
 
-	if ( ! current_user_can( 'manage_options' ) ) {
-		return;
-	}
-
 	$history = $wpdb->get_row(
 		$wpdb->prepare(
 			"

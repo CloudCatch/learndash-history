@@ -29,6 +29,7 @@ function initialize() {
 		require_once plugin_dir_path( __FILE__ ) . '/lib/functions/triggers.php';
 		require_once plugin_dir_path( __FILE__ ) . '/lib/functions/views.php';
 		require_once plugin_dir_path( __FILE__ ) . '/lib/functions/certificates.php';
+		require_once plugin_dir_path( __FILE__ ) . '/lib/functions/history.php';
 
 		/**
 		 * Init localization files
