@@ -230,5 +230,5 @@ function courseinfo( $value, $shortcode_atts ) {
 
 	return $value;
 }
-\add_filter( 'learndash_courseinfo', __NAMESPACE__ . '\courseinfo', 10, 2 );
-\add_filter( 'learndash_quizinfo', __NAMESPACE__ . '\courseinfo', 10, 2 );
+\add_filter( 'learndash_courseinfo', __NAMESPACE__ . '\courseinfo', PHP_INT_MAX, 2 );
+\add_filter( 'learndash_quizinfo', __NAMESPACE__ . '\courseinfo', PHP_INT_MAX, 2 );

@@ -54,6 +54,9 @@
     ],
     "post-update-cmd": [
       "composer dump-autoload -o"
+    ],
+    "plugin-zip": [
+      "bash bin/build-zip.sh"
     ]
   },
   "extra": {
